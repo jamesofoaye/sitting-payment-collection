@@ -1,11 +1,44 @@
 import Head from 'next/head'
 import { Image, Text, Button, Paper } from '@mantine/core';
+import { useNotifications } from '@mantine/notifications';
 import useSWR from "swr";
+import { usePaystackPayment } from 'react-paystack';
 
-const fetcher = (url) => fetch(url, {headers: {Authorization: 'Bearer ' + process.env.FLUTTERWAVE_SECRET_KEY}}).then((res) => res.json());
+const fetcher = (url) => fetch(url, {
+  headers: {
+    Authorization: 'Bearer ' + 'sk_test_5e47fa27035175b371c7eb328d2b5baee353b4c4',
+}}).then((res) => res.json());
 
 export default function Home() {
-  const { data, error } = useSWR("https://api.flutterwave.com/v3/balances/GHS", fetcher, {refreshInterval: 200});
+  const { data, error } = useSWR("https://api.paystack.co/balance", fetcher, {refreshInterval: 200});
+   const notifications = useNotifications();
+
+  const config = {
+      reference: (new Date()).getTime().toString(),
+      email: "user@example.com",
+      amount: 2000,
+      publicKey: 'pk_test_08f29c1c4ec04ff7cb435e8ba4e4f70b99bdda29',
+      currency: 'GHS'
+  };
+  
+  // you can call this function anything
+  const onSuccess = (reference) => {
+    notifications.showNotification({
+      title: 'Success',
+      message: 'Payment Succesful👍✔',
+    })
+  };
+
+  // you can call this function anything
+  const onClose = () => {
+    // implementation for  whatever you want to do when the Paystack dialog closed.
+    notifications.showNotification({
+      title: 'Error',
+      message: 'You cancelled the payment 🤥😢',
+    })
+  }
+
+  const initializePayment = usePaystackPayment(config);
 
   return (
     <div>
@@ -39,7 +72,14 @@ export default function Home() {
           Ledger Balance: GHS {!data ? 'Please Wait, Loading Ledger Balance...' : data.ledger_balance}
         </Text>
 
-        <Button variant="default" fullWidth mt="md">
+        <Button 
+          variant="default" 
+          fullWidth 
+          mt="md"
+          onClick={() => {
+            initializePayment(onSuccess, onClose)
+          }}
+        >
           Initiate Payment
         </Button>
       </Paper>
