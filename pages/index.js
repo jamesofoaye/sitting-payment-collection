@@ -1,5 +1,6 @@
 import Head from 'next/head'
-import { Image, Text, Button, Paper } from '@mantine/core';
+import Link from 'next/link'
+import { Image, Text, Button, Paper, Center, Anchor   } from '@mantine/core';
 import { useNotifications } from '@mantine/notifications';
 import useSWR from "swr";
 import { usePaystackPayment } from 'react-paystack';
@@ -83,6 +84,22 @@ export default function Home() {
           Initiate Payment
         </Button>
       </Paper>
+             
+      <Center 
+        style={{ 
+          width: 400, 
+          position: 'fixed', 
+          left: 0, 
+          bottom: 0,
+        }}
+      >
+        Developed By {''}
+        <Link href={'https://ofori-james-ayerakwa.me'} passHref>
+          <Anchor target="_blank" style={{marginLeft: 5}}>
+            Ofori James Ayerakwa
+          </Anchor>
+        </Link>
+      </Center>
     </div>
   )
 }
