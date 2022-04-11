@@ -16,17 +16,18 @@ const fetcher = (url) => fetch(url, {
 }}).then((res) => res.json());
 
 export default function Home() {
-   const [email, setEmail] = useState('');
+  const [email, setEmail] = useState('');
 
   const { data, error } = useSWR("https://api.paystack.co/balance", fetcher, {refreshInterval: 200});
-   const notifications = useNotifications();
+
+  const notifications = useNotifications();
 
   const config = {
-      reference: (new Date()).getTime().toString(),
-      email,
-      amount: 2000,
-      publicKey: process.env.NEXT_PUBLIC_PAYSTACK_PUBLIC_KEY,
-      currency: 'GHS'
+    reference: (new Date()).getTime().toString(),
+    email,
+    amount: 2000,
+    publicKey: process.env.NEXT_PUBLIC_PAYSTACK_PUBLIC_KEY,
+    currency: 'GHS'
   };
   
   // you can call this function anything
@@ -53,7 +54,7 @@ export default function Home() {
     <div>
       <Head>
         <title>Sitting Payment Collection Platform</title>
-        <meta name="description" content="Payment Collection Platform for a club in my neighborhood at Achimota Acc" />
+        <meta name="description" content="Payment Collection Platform for a club in my neighborhood at Achimota Accra" />
         <link rel="icon" href="/favicon.ico" />
       </Head>
 
@@ -101,15 +102,17 @@ export default function Home() {
              
       <Center 
         style={{ 
-          width: 400, 
           position: 'fixed', 
           left: 0, 
           bottom: 0,
+          width: '100%',
+          marginLeft: 'auto',
+          marginRight: 'auto',
         }}
       >
         Developed By {''}
         <Link href={'https://ofori-james-ayerakwa.me'} passHref>
-          <Anchor target="_blank" style={{marginLeft: 5}}>
+          <Anchor target="_blank" style={{ marginLeft: 5}}>
             Ofori James Ayerakwa
           </Anchor>
         </Link>
