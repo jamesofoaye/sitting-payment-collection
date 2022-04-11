@@ -74,7 +74,7 @@ export default function Home() {
           />
         </div>
 
-        <Text align="center" size="lg" weight={500} my="md">
+        <Text align="center" size="lg" weight={500} mt="md">
           Total Balance: {!data ? 'Please Wait, Loading Available Balance...' : `GHS ${data.data.total_volume/ 100}`}
         </Text>
 
