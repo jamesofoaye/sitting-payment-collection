@@ -18,7 +18,7 @@ const fetcher = (url) => fetch(url, {
 export default function Home() {
   const [email, setEmail] = useState('');
 
-  const { data, error } = useSWR("https://api.paystack.co/balance", fetcher, {refreshInterval: 200});
+  const { data, error } = useSWR("https://api.paystack.co/transaction/totals", fetcher, {refreshInterval: 200});
 
   const notifications = useNotifications();
 
@@ -75,7 +75,11 @@ export default function Home() {
         </div>
 
         <Text align="center" size="lg" weight={500} my="md">
-          Available Balance: {!data ? 'Please Wait, Loading Available Balance...' : `GHS ${data.data[0].balance}`}
+          Total Balance: {!data ? 'Please Wait, Loading Available Balance...' : `GHS ${data.data.total_volume/ 100}`}
+        </Text>
+
+        <Text align="center" size="lg" weight={500} my="md">
+          Pending Balance: {!data ? 'Please Wait, Loading Pending Balance...' : `GHS ${data.data.pending_transfers/ 100}`}
         </Text>
 
         <TextInput 
