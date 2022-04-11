@@ -1,29 +1,36 @@
+import { useState } from 'react';
 import Head from 'next/head'
 import Link from 'next/link'
-import { Image, Text, Button, Paper, Center, Anchor   } from '@mantine/core';
+import { Image, Text, Button, Paper, Center, Anchor, TextInput } from '@mantine/core';
 import { useNotifications } from '@mantine/notifications';
 import useSWR from "swr";
 import { usePaystackPayment } from 'react-paystack';
+import { At } from 'tabler-icons-react';
+
+//Paystack Secret Key
+const secretKey = process.env.NEXT_PUBLIC_PAYSTACK_SECRET_KEY;
 
 const fetcher = (url) => fetch(url, {
   headers: {
-    Authorization: 'Bearer ' + 'sk_test_5e47fa27035175b371c7eb328d2b5baee353b4c4',
+    Authorization: 'Bearer ' + secretKey,
 }}).then((res) => res.json());
 
 export default function Home() {
+   const [email, setEmail] = useState('');
+
   const { data, error } = useSWR("https://api.paystack.co/balance", fetcher, {refreshInterval: 200});
    const notifications = useNotifications();
 
   const config = {
       reference: (new Date()).getTime().toString(),
-      email: "user@example.com",
+      email,
       amount: 2000,
-      publicKey: 'pk_test_08f29c1c4ec04ff7cb435e8ba4e4f70b99bdda29',
+      publicKey: process.env.NEXT_PUBLIC_PAYSTACK_PUBLIC_KEY,
       currency: 'GHS'
   };
   
   // you can call this function anything
-  const onSuccess = (reference) => {
+  const onSuccess = () => {
     notifications.showNotification({
       title: 'Success',
       message: 'Payment Succesful👍✔',
@@ -36,6 +43,7 @@ export default function Home() {
     notifications.showNotification({
       title: 'Error',
       message: 'You cancelled the payment 🤥😢',
+      color: 'red'
     })
   }
 
@@ -65,13 +73,18 @@ export default function Home() {
           />
         </div>
 
-        <Text align="center" size="lg" weight={500} mt="md">
-          Available Balance: GHS {!data ? 'Please Wait, Loading Available Balance...' : data.available_balance}
+        <Text align="center" size="lg" weight={500} my="md">
+          Available Balance: {!data ? 'Please Wait, Loading Available Balance...' : `GHS ${data.data[0].balance}`}
         </Text>
 
-        <Text align="center" size="lg" weight={500} mt="md">
-          Ledger Balance: GHS {!data ? 'Please Wait, Loading Ledger Balance...' : data.ledger_balance}
-        </Text>
+        <TextInput 
+          label="Your email" 
+          placeholder="Your email" 
+          icon={<At size={14} />}
+          value={email}
+          onChange={(e) => setEmail(e.target.value)}
+          error={!email ? 'Please enter your email' : null}
+        />
 
         <Button 
           variant="default" 
@@ -80,6 +93,7 @@ export default function Home() {
           onClick={() => {
             initializePayment(onSuccess, onClose)
           }}
+          disabled={!email}
         >
           Initiate Payment
         </Button>
