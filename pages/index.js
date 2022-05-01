@@ -103,13 +103,22 @@ export default function Home() {
             variant="outline"
           >
             39 pesewas has been added to the 20 cedis. This is because paystack charges 
-            1.95 % for every transaction they processed for us. Therefore you're required 
+            1.95 % for every transaction they processed for us. Therefore you&apos;re required 
             to pay GHS 20.39 as your dues now. Thank you. 
             Contact Big Joe for further explanation if you don&apos;t understand anything.
           </Alert>
 
           <Text mt={10}>
-             Visit <a href="https://paystack.com/gh/pricing?q=/pricing" target='_blank'>Paystack Pricing</a> to Read More on their charges.
+            Visit 
+              <a 
+                href="https://paystack.com/gh/pricing?q=/pricing" 
+                target='_blank'
+                rel='noreferrer'
+                title='Paystack Pricing'
+              >
+               Paystack Pricing
+              </a> {''}
+            to Read More on their charges.
           </Text>
         </Modal>
 
