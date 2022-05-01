@@ -109,7 +109,7 @@ export default function Home() {
           </Alert>
 
           <Text mt={10}>
-            Visit 
+            Visit {''}
               <a 
                 href="https://paystack.com/gh/pricing?q=/pricing" 
                 target='_blank'
